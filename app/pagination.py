@@ -1,6 +1,6 @@
-from rest_framework.pagination import PageNumberPagination\
+from rest_framework.pagination import PageNumberPagination
 
-class TodoPatination(PageNumberPagination):
+class TodoPagination(PageNumberPagination):
     page_size = 1
     page_size_query_param = 'page_size'
-    max_page_size = 1000
+    max_page_size = 100
