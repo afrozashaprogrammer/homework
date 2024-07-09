@@ -46,13 +46,22 @@ def todo_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BED_REQUEST)
 
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 def todo_detail(request, id):
     todo = get_object_or_404(Todo, id=id)
-    
+
     if request.method == 'GET':
         serializer = TodoDetailSerializer(todo)
         return Response(serializer.data)
+    
+    elif request.method == 'PATCH':
+        data = request.data
+        serializer = TodoDetailSerializer(todo, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
     elif request.method == 'DELETE':
         todo.delete()
