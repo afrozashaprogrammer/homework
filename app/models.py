@@ -7,4 +7,4 @@ class Todo(models.Model):
     completed = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)

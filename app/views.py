@@ -1,7 +1,9 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 from .serializers import *
 from .models import *
 from .pagination import *
@@ -23,6 +25,7 @@ def index(request):
     return Response(person_list)
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def todo_list(request):
     if request.method == 'GET':
         todos = Todo.objects.all()
@@ -41,7 +44,7 @@ def todo_list(request):
         data = request.data
         serializer = TodoCreateSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(created_by=request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BED_REQUEST)
 
